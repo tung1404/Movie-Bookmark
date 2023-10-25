@@ -1,0 +1,13 @@
+node_modules
+/*.*
+
+# Ignore artifacts:
+cypress/
+coverage/
+dist/
+public/
+__mocks__/
+
+jest.config.js
+postcss.config.js
+**/*.cy.*
