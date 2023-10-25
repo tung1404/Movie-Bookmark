@@ -1,0 +1,12 @@
+framer-motion
+react-redux
+react-hot-toast
+@reduxjs/toolkit
+@mui/material
+@mui/icons-material
+@emotion/styled 
+@emotion/react
+@next/font
+autoprefixer
+postcss
+tailwindcss

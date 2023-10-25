@@ -1,88 +1,44 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client'
+
+import { useEffect } from 'react'
+import { results } from '../data/movie'
+import { useAppSelector } from '../redux/hooks'
+import MovieCard from './components/MovieCard'
+import AnimatedWrapper from './components/AnimationWrapper'
+import { getBookmarksFromFirebaseDB } from '../redux/features/bookmarkThunk'
+import { useAppDispatch } from '../redux/hooks'
 
 export default function Home() {
+  const user: any = useAppSelector(state => state.bookmark.user)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(getBookmarksFromFirebaseDB())
+  }, [dispatch])
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href='https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'>
-            By{' '}
-            <Image
-              src='/vercel.svg'
-              alt='Vercel Logo'
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <>
+      <div className='h-auto flex flex-col items-center justify-center px-4 py-4'>
+        <AnimatedWrapper>
+          <div className='grid grid-cols-4 max-md:grid-cols-2 gap-6 max-sm:grid-cols-1 gap-3 items-center max-sm:flex max-sm:justify-center max-sm:flex-col'>
+            {results.map(movie => {
+              return (
+                <div key={movie?.id}>
+                  <MovieCard
+                    title={movie?.title as string}
+                    movieId={movie?.id as number}
+                    poster_path={movie?.poster_path as string}
+                    backdrop_path={movie?.backdrop_path as string}
+                    release_date={movie?.release_date as string}
+                    movieRating={movie?.vote_average as number}
+                    user={user}
+                  />
+                </div>
+              )
+            })}
+          </div>
+        </AnimatedWrapper>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src='/next.svg'
-          alt='Next.js Logo'
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href='https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-          className={styles.card}
-          target='_blank'
-          rel='noopener noreferrer'>
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href='https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-          className={styles.card}
-          target='_blank'
-          rel='noopener noreferrer'>
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href='https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-          className={styles.card}
-          target='_blank'
-          rel='noopener noreferrer'>
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href='https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app'
-          className={styles.card}
-          target='_blank'
-          rel='noopener noreferrer'>
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>Instantly deploy your Next.js site to a shareable URL with Vercel.</p>
-        </a>
-      </div>
-    </main>
+    </>
   )
 }
